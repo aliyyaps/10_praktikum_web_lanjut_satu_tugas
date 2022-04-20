@@ -7,7 +7,9 @@ use App\Models\Mahasiswa;
 use Illuminate\Support\Facades\DB;
 use App\Models\Kelas;
 use App\Models\Mahasiswa_MataKuliah;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Support\Facades\Storage;
+use PDF; // Tugas 2 JS 10
 
 class MahasiswaController extends Controller
 {
@@ -211,5 +213,14 @@ class MahasiswaController extends Controller
 
         // Menampilkan nilai
         return view('mahasiswa.nilai', compact('daftar'));
+    }
+
+    // Tugas 2 JS 10
+    public function cetak_pdf($Nim)
+    {
+        $daftar = Mahasiswa_MataKuliah::where("mahasiswa_id", $Nim)->get();
+        $daftar->mahasiswa = Mahasiswa::with('kelas')->where("nim", $Nim)->first();
+        $pdf = PDF::loadview('mahasiswa.nilai_cetakpdf', compact('daftar'));
+        return $pdf->stream();
     }
 }
