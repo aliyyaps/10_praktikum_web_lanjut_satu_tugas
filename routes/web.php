@@ -29,3 +29,6 @@ Route::resource('articles', ArticleController::class);
 
 // Praktikum 3 JS 10 (Langkah 3)
 Route::get('/article/cetak_pdf', [ArticleController::class, 'cetak_pdf']);
+
+// Tugas 2 JS 10
+Route::get('/mahasiswa/cetak_pdf/{nim}', [MahasiswaController::class, 'cetak_pdf'])->name('cetak_pdf');
