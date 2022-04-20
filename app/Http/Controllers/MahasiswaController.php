@@ -7,6 +7,7 @@ use App\Models\Mahasiswa;
 use Illuminate\Support\Facades\DB;
 use App\Models\Kelas;
 use App\Models\Mahasiswa_MataKuliah;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
@@ -29,7 +30,7 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::with('kelas')->get();
 
         // Mengambil semua isi tabel 
-        $posts = Mahasiswa::orderBy('nim', 'asc')->paginate(3);
+        $posts = Mahasiswa::orderBy('nim', 'desc')->paginate(3);
         return view('mahasiswa.index', ['mahasiswa' => $posts]);
     }
 
@@ -59,6 +60,7 @@ class MahasiswaController extends Controller
         $request->validate([
             'Nim' => 'required',
             'Nama' => 'required',
+            'Foto' => 'required|file|image|mimes:jpeg,png,jpg|max:1024', // Tugas No 1 JS 10
             'kelas' => 'required',
             'Jurusan' => 'required',
 
@@ -72,7 +74,7 @@ class MahasiswaController extends Controller
         $mahasiswa = new Mahasiswa;
         $mahasiswa->nim = $request->get('Nim');
         $mahasiswa->nama = $request->get('Nama');
-        // $mahasiswa->kelas_id = $request->get('Kelas');
+        $mahasiswa->foto = $request->file('Foto')->store('images', 'public'); // Tugas No 1 JS 10
         $mahasiswa->jurusan = $request->get('Jurusan');
         $mahasiswa->email = $request->get('Email');
         $mahasiswa->alamat = $request->get('Alamat');
@@ -136,6 +138,7 @@ class MahasiswaController extends Controller
         $data = $request->validate([
             'Nim' => 'required',
             'Nama' => 'required',
+            'Foto' => 'required|file|image|mimes:jpeg,png,jpg|max:1024', // Tugas No 1 JS 10
             'Kelas' => 'required',
             'Jurusan' => 'required',
 
@@ -147,8 +150,15 @@ class MahasiswaController extends Controller
 
         // Praktikum 1 JS 9 (Langkah 29)
         $mahasiswa = Mahasiswa::with('kelas')->where('nim', $Nim)->first();
-        // $mahasiswa->nim = $request->get('Nim');
         $mahasiswa->nama = $request->get('Nama');
+
+        // Tugas No 1 JS 10
+        if ($mahasiswa->foto && file_exists(storage_path('app/public/' . $mahasiswa->foto))) {
+            Storage::delete('public/' . $mahasiswa->foto);
+        }
+        $image_name = $request->file('Foto')->store('images', 'public');
+        $mahasiswa->foto = $image_name;
+
         $mahasiswa->kelas_id = $request->get('Kelas');
         $mahasiswa->jurusan = $request->get('Jurusan');
         $mahasiswa->email = $request->get('Email');
