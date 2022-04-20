@@ -31,6 +31,9 @@
     <tr>
         <th>Nim</th>
         <th>Nama</th>
+        <!-- Tugas No 1 JS 10 -->
+        <th>Foto</th>
+
         <th>Kelas</th>
         <th>Jurusan</th>
 
@@ -45,6 +48,9 @@
 
         <td>{{ $mhs ->nim }}</td>
         <td>{{ $mhs ->nama }}</td>
+
+        <!-- Tugas No 1 JS 10 -->
+        <td><img width="100px" height="100px" src="{{ asset('storage/' . $mhs->foto) }}"></td>
 
         <!-- Praktikum 1 JS 9 (Langkah 19) - Menambahkan ->nama_kelas -->
         <td>{{ $mhs ->kelas ->nama_kelas }}</td>
