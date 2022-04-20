@@ -39,12 +39,14 @@
                         {{$d->matakuliah->semester}}
                     </td>
                     <td>
-                        {{$d ->nilai}}
+                        {{$d->nilai}}
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+        <!-- Tugas 2 JS 10 -->
+        <center><a class="btn btn-danger" href="{{ route('cetak_pdf', $daftar->mahasiswa->nim) }}"> Cetak Ke PDF</a></center>
     </div>
 </div>
 @endsection
